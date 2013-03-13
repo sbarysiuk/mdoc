@@ -101,6 +101,10 @@ function processDoc(config){
         });
         console.log('  processed: '+ fileInfo.input +' > '+ fileInfo.output);
     });
+    
+    if(config.modifyTocOrder && typeof config.modifyTocOrder == 'function') {
+        toc = config.modifyTocOrder(toc)
+    }
 
     return toc;
 }
