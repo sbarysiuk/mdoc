@@ -1,4 +1,3 @@
-
 var handlebars = require('handlebars'),
     fs = require('fs'),
     path = require('path'),
@@ -90,6 +89,7 @@ function processDoc(config){
             toc.push({
                 'file' : fileName,
                 'module' : moduleName,
+                'module_title': parseResult.title, 
                 'toc' : parseResult.toc
             });
 
@@ -103,6 +103,10 @@ function processDoc(config){
         });
         console.log('  processed: '+ fileInfo.input +' > '+ fileInfo.output);
     });
+    
+    if(config.modifyTocOrder && typeof config.modifyTocOrder == 'function') {
+        toc = config.modifyTocOrder(toc)
+    }
 
     return toc;
 }
