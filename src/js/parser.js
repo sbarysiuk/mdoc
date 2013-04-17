@@ -109,7 +109,7 @@ function parseContent(mdown, toc, shouldSkipToc){
         tocContent += ' - ['+ val.name +'](#'+ val.href +')\n';
     });
 
-    var _content = pre + (tocContent ? !shouldSkipToc : "") + post;
+    var _content = pre + (!shouldSkipToc ? tocContent : "") + post;
 
     return showdown.parse(_content);
 }
