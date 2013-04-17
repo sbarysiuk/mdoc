@@ -55,12 +55,14 @@ exports.processFiles = function(config){
         modules : toc
     }), 'utf-8');
 
-    console.log('  Generating Index...');
-    fs.writeFileSync(path.join(outputDir, 'index.html'), _indexTemplate({
-        modules : toc,
-        page_title : config.baseTitle || DEFAULT_PAGE_TITLE,
-        content : getIndexContent(config)
-    }), 'utf-8');
+    if(!config.skipIndex) {
+        console.log('  Generating Index...');
+        fs.writeFileSync(path.join(outputDir, 'index.html'), _indexTemplate({
+            modules : toc,
+            page_title : config.baseTitle || DEFAULT_PAGE_TITLE,
+            content : getIndexContent(config)
+        }), 'utf-8');    
+    }
 
     console.log('  Copying Assets...');
     var assetsPath = config.assetsPath || path.normalize(_baseTemplatePath +'/assets_');
