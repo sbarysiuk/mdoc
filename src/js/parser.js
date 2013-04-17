@@ -4,7 +4,7 @@ var showdown = require('./lib/showdown');
 var _headingLevel;
 
 
-exports.parseDoc = function(mdown, headingLevel){
+exports.parseDoc = function(mdown, headingLevel, shouldSkipToc){
     mdown = normalizeLineBreaks(mdown);
     mdown = convertCodeBlocks(mdown);
     _headingLevel = (headingLevel || 2);
@@ -13,7 +13,7 @@ exports.parseDoc = function(mdown, headingLevel){
 
     return {
         toc : toc,
-        html :  parseContent(mdown, toc),
+        html :  parseContent(mdown, toc, shouldSkipToc),
         title : getTitle(mdown)
     };
 };
@@ -87,7 +87,7 @@ function getDescription(mdown, fromIndex) {
     return desc;
 }
 
-function parseContent(mdown, toc){
+function parseContent(mdown, toc, shouldSkipToc){
 
     // add deep-links
 
@@ -109,7 +109,9 @@ function parseContent(mdown, toc){
         tocContent += ' - ['+ val.name +'](#'+ val.href +')\n';
     });
 
-    return showdown.parse( pre + tocContent + post );
+    var _content = pre + (tocContent ? !shouldSkipToc : "") + post;
+
+    return showdown.parse(_content);
 }
 
 

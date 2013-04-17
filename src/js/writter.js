@@ -82,7 +82,7 @@ function processDoc(config){
         }
 
         pathProcessor.processFile(fileInfo, function(content){
-            var parseResult = parser.parseDoc(content, config.headingLevel),
+            var parseResult = parser.parseDoc(content, config.headingLevel, fileInfo.shouldSkipToc),
                 fileName = fileInfo.output.replace(config.outputDir, '').replace(/^\//, ''),
                 moduleName = config.mapTocName? config.mapTocName(fileName, parseResult.toc) : fileName.replace('.html', '');
 
@@ -124,6 +124,17 @@ function getFilesInfos(config){
 
     if (config.filterFiles) {
         files = files.filter(config.filterFiles);
+    }
+
+    //check if no need to generate inner TOC for file
+    if(config.doNotRenderToc && config.doNotRenderToc.length>0) {
+        for(var i=0; i<files.length; i++) {
+            for(var j=0; j<config.doNotRenderToc.length; j++) {
+                if(config.doNotRenderToc[j] == files[i].input) {
+                    files[i].shouldSkipToc = true;
+                }
+            }
+        }
     }
 
     return files;
